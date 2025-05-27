@@ -75,5 +75,10 @@ if uploaded_file is not None:
         st.error(f"Error processing file: {e}")
 # Predict
 if st.button("Predict Loan Approval"):
-    prediction = model.predict(input_data)[0]
-    st.success("Loan Approved" if prediction == 1 else "Loan Rejected")
+    if loan_amount <= 0 or applicant_income < 0 or coapplicant_income < 0:
+        st.warning("Please enter valid positive numbers for income and loan amount.")
+    elif loan_term <= 0:
+        st.warning("Loan term must be greater than 0.")
+    else:
+        prediction = model.predict(input_data)[0]
+        st.success("Loan Approved" if prediction == 1 else "Loan Rejected")
