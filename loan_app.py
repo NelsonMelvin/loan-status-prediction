@@ -13,7 +13,7 @@ import joblib
 
 # Load model (make sure 'loan_model.pkl' is in the same folder)
 model = joblib.load('loan_model.pkl')
-st.title("Load Status Prediction App")
+st.title("Loan Status Prediction App")
 
 # User input fields
 gender = st.selectbox("Gender", ["Male", "Female"])
