@@ -48,6 +48,31 @@ input_data = pd.DataFrame([[
     'Loan_Amount_Term', 'Credit_History', 'Property_Area'
 ])
 
+st.markdown("---")
+st.subheader("Batch Prediction from CSV")
+
+uploaded_file = st.file_uploader("Upload CSV file", type=["csv"])
+
+if uploaded_file is not None:
+    try:
+        batch_data = pd.read_csv(uploaded_file)
+
+        # Optional: check if required columns exist
+        expected_cols = ['Gender', 'Married', 'Dependents', 'Education', 'Self_Employed',
+                         'ApplicantIncome', 'CoapplicantIncome', 'LoanAmount',
+                         'Loan_Amount_Term', 'Credit_History', 'Property_Area']
+        
+        if all(col in batch_data.columns for col in expected_cols):
+            predictions = model.predict(batch_data)
+            batch_data["Prediction"] = ["Approved" if p == 1 else "Rejected" for p in predictions]
+
+            st.success("Batch prediction complete!")
+            st.dataframe(batch_data)
+        else:
+            st.error("Uploaded file is missing one or more required columns.")
+    
+    except Exception as e:
+        st.error(f"Error processing file: {e}")
 # Predict
 if st.button("Predict Loan Approval"):
     prediction = model.predict(input_data)[0]
